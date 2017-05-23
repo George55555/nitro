@@ -1,0 +1,2 @@
+debian/bin/NitroCoind usr/bin
+src/NitroCoind usr/lib/NitroCoin

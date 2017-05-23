@@ -1,0 +1,5 @@
+NitroCoin-qt usr/bin
+share/pixmaps/NitroCoin32.xpm usr/share/pixmaps
+share/pixmaps/NitroCoin80.xpm usr/share/pixmaps
+debian/NitroCoin-qt.desktop usr/share/applications
+debian/NitroCoin-qt.protocol usr/share/kde4/services/

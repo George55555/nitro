@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=NitroCoin
+Comment=NitroCoin P2P Cryptocurrency
+Comment[ru]=NitroCoin, P2P криптовалюта
+Comment[fr]=NitroCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=NitroCoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/NitroCoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/NitroCoin80.xpm
+MimeType=x-scheme-handler/NitroCoin;
+Categories=Office;

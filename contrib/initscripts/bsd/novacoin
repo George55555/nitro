@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: NitroCoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# NitroCoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable NitroCoin service.
+# NitroCoin_config (path): Set to /usr/local/etc/NitroCoin.conf by default.
+# NitroCoin_user:  The user account NitroCoin daemon runs as. It uses 'root' user by default.
+# NitroCoin_group: The group account NitroCoin daemon runs as. It uses 'wheel' group by default.
+# NitroCoin_datadir (str): Default to "/var/db/NitroCoin". Base data directory.
+
+. /etc/rc.subr
+
+name=NitroCoin
+rcvar=NitroCoin_enable
+
+: ${NitroCoin_enable:=NO}
+: ${NitroCoin_config=/usr/local/etc/NitroCoin.conf}
+: ${NitroCoin_datadir=/var/db/NitroCoin}
+: ${NitroCoin_user="root"}
+: ${NitroCoin_group="wheel"}
+
+required_files=${NitroCoin_config}
+command=/usr/local/bin/NitroCoind
+NitroCoin_chdir=${NitroCoin_datadir}
+pidfile="${NitroCoin_datadir}/NitroCoind.pid"
+stop_cmd=NitroCoin_stop
+command_args="-conf=${NitroCoin_config} -datadir=${NitroCoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+NitroCoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${NitroCoin_datadir}
+	[ $? -eq 0 ] && chown -R ${NitroCoin_user}:${NitroCoin_group} ${NitroCoin_datadir}
+}
+
+NitroCoin_prestart()
+{
+	if [ ! -d "${NitroCoin_datadir}/." ]; then
+		NitroCoin_create_datadir || return 1
+	fi
+}
+
+NitroCoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+NitroCoin_stop()
+{
+    NitroCoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${NitroCoin_config} -datadir=${NitroCoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

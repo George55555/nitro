@@ -1,0 +1,11 @@
+[Unit]
+Description=NitroCoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=NitroCoin
+ExecStart=/opt/NitroCoin/NitroCoind
+
+[Install]
+WantedBy=multi-user.target
